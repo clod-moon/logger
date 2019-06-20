@@ -1,7 +1,7 @@
-#include "CLogFile.h"
+#include "CLogfile.h"
 #include <assert.h>
 #include <stdio.h>
-
+#include <string.h>
 
 AppendFile::AppendFile(std::string filename)
 #ifndef _WIN32
@@ -44,7 +44,7 @@ void AppendFile::append(const char* logline, const size_t len)
 				fprintf_s(stderr, "AppendFile::append() failed %s\n", szErrBuf);
 #else
 
-				fprintf(stderr, "AppendFile::append() failed %s\n", strerror_tl(err));
+				fprintf(stderr, "AppendFile::append() failed %s\n", strerror(err));
 #endif 
 			}
 			break;

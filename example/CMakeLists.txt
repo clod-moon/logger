@@ -1,3 +1,3 @@
-add_executable(example *.cpp)
-target_link_libraries(example logger)
+add_executable(example example.cpp)
+target_link_libraries(example)
 

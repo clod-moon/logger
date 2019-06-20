@@ -3,6 +3,7 @@
 
 #include <string>
 #include <mutex>
+#include <memory>
 
 class AppendFile
 {

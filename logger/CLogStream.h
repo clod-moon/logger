@@ -3,6 +3,7 @@
 
 #include <sstream>
 #include <string>
+#include <string.h>
 
 class CLogStream
 {

@@ -1,22 +1,24 @@
-set(SRCS
-	*.h
-	*.cpp
-	*.hpp
-  )
+cmake_minimum_required(VERSION 2.6)
 
-add_library(logger ${SRCS})
-target_link_libraries()
+INCLUDE_DIRECTORIES(
+)
 
-#add_library(muduo_base_cpp11 ${base_SRCS})
-#target_link_libraries(muduo_base_cpp11 pthread rt)
-#set_target_properties(muduo_base_cpp11 PROPERTIES COMPILE_FLAGS "-std=c++0x")
+MESSAGE(STATUS "Current Dir: " ${CMAKE_CURRENT_SOURCE_DIR})
+FILE(GLOB_RECURSE SRC_LIST "*.c" "*.cpp" "*.h")
 
-#install(TARGETS muduo_base DESTINATION lib)
-#install(TARGETS muduo_base_cpp11 DESTINATION lib)
+#平台无关库
+SET(COMMON_LIBS 
+	)
+	
 
-#file(GLOB HEADERS "*.h")
-#install(FILES ${HEADERS} DESTINATION include/muduo/base)
+SET(PROJECT logger)
 
-#if(MUDUO_BUILD_EXAMPLES)
-#  add_subdirectory(tests)
-#endif()
+#设置debug版本输出文件名后缀
+set(CMAKE_DEBUG_POSTFIX "d")
+
+#编译
+add_library(${PROJECT} SHARED ${SRC_LIST})
+
+
+#连接
+target_link_libraries(${PROJECT} ${COMMON_LIBS})
