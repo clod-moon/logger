@@ -50,14 +50,18 @@ private:
 	std::string&			m_strFunc;
 	std::stringstream       m_head;
 	bool					m_isFlush;
-	
-	static LogStringType  s_logStringType; b
+public:
+	static LogStringType  s_logStringType; 
 	static LogLevel		  s_WriteLogLevel;
 	static CLogOutput	  s_Output;
 	static std::string    s_strLogTimeZone;
 
 };
 
+CLogger::LogStringType  CLogger::s_logStringType = CLogger::STRING;
+CLogger::LogLevel		CLogger::s_WriteLogLevel = CLogger::DEBUG_;
+CLogOutput	  CLogger::s_Output = CLogOutput();
+std::string    CLogger::s_strLogTimeZone = "";
 
 inline CLogger::LogLevel CLogger::logLevel()
 {
