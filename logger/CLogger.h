@@ -3,7 +3,8 @@
 
 #include "CLogStream.h"
 #include "CTimestamp.h"
-#include "CLogfile.h"
+#include "CLogOutput.h"
+#include <string>
 
 class CLogger
 {
@@ -19,89 +20,54 @@ public:
 		NUM_LOG_LEVELS,
 	};
 
-	typedef std::stringstream CLogStream;
-
-	// compile time calculation of basename of source file
-	class SourceFile
+	enum LogStringType
 	{
-	public:
-		template<int N>
-		SourceFile(const char(&arr)[N])
-			: data_(arr),
-			size_(N - 1)
-		{
-			const char* slash = strrchr(data_, '/'); // builtin function
-			if (slash)
-			{
-				data_ = slash + 1;
-				size_ -= static_cast<int>(data_ - arr);
-			}
-		}
-
-		explicit SourceFile(const char* filename)
-			: data_(filename)
-		{
-			const char* slash = strrchr(filename, '/');
-			if (slash)
-			{
-				data_ = slash + 1;
-			}
-			size_ = static_cast<int>(strlen(data_));
-		}
-
-		const char* data_;
-		int size_;
+		STRING,
+		JSON,
 	};
 
-	CLogger(SourceFile file, int line);
-	CLogger(SourceFile file, int line, LogLevel level);
-	CLogger(SourceFile file, int line, LogLevel level, const char* func);
-	CLogger(SourceFile file, int line, bool toAbort);
+	CLogger(int line, LogLevel level, const char* func);
+
 	~CLogger();
 
-	CLogStream& stream() { return m_impl.m_sstream; }
+	CLogStream& stream() { return m_LogStream; }
 
 	static LogLevel logLevel();
 	static void setLogLevel(LogLevel level);
 
-	typedef void(*OutputFunc)(const char* msg, int len);
-	typedef void(*FlushFunc)();
-	static void setOutput(OutputFunc);
-	static void setFlush(FlushFunc);
+	static void setOutput();
 	static void setTimeZone(const std::string tz);
+	static void setLogStringType(const LogStringType t);
 
 private:
-
-	class Impl
-	{
-	public:
-		typedef CLogger::LogLevel LogLevel;
-		Impl(LogLevel level, int old_errno, const SourceFile& file, int line);
-		void formatTime();
-		void finish();
-
-		CMilliTimestamp m_time;
-		std::stringstream m_sstream;
-		LogLevel m_nLevel;
-		int m_nLine;
-		SourceFile m_strBasename;
-	};
-
-	Impl m_impl;
+	void fmtToJson();
+	void writeLog();
+private:
+	CMilliTimestamp&		m_time;
+	CLogStream&				m_LogStream;
+	LogLevel&				m_nLevel;
+	int&					m_nLine;
+	std::string&			m_strFunc;
+	std::stringstream       m_head;
+	bool					m_isFlush;
+	
+	static LogStringType  s_logStringType; b
+	static LogLevel		  s_WriteLogLevel;
+	static CLogOutput	  s_Output;
+	static std::string    s_strLogTimeZone;
 
 };
 
-extern CLogger::LogLevel g_logLevel;
 
 inline CLogger::LogLevel CLogger::logLevel()
 {
-	return g_logLevel;
+	return s_WriteLogLevel;
 }
 
 #define LOG_TRACE if (CLogger::logLevel() <= CLogger::TRACE) \
   CLogger(__FILE__, __LINE__, CLogger::TRACE, __func__).stream()
-#define LOG_DEBUG if (CLogger::logLevel() <= CLogger::DEBUG) \
-  CLogger(__FILE__, __LINE__, CLogger::DEBUG, __func__).stream()
+#define LOG_DEBUG if (CLogger::logLevel() <= CLogger::DEBUG_) \
+  CLogger(__FILE__, __LINE__, CLogger::DEBUG_, __func__).stream()
 #define LOG_INFO if (CLogger::logLevel() <= CLogger::INFO) \
   CLogger(__FILE__, __LINE__).stream()
 #define LOG_WARN CLogger(__FILE__, __LINE__, CLogger::WARN).stream()
@@ -115,7 +81,7 @@ inline CLogger::LogLevel CLogger::logLevel()
   ::CheckNotNull(__FILE__, __LINE__, "'" #val "' Must be non NULL", (val))
 
 template <typename T>
-T* CheckNotNull(CLogger::SourceFile file, int line, const char *names, T* ptr)
+T* CheckNotNull(int line, const char *names, T* ptr)
 {
 	if (ptr == NULL)
 	{

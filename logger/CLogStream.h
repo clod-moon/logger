@@ -5,18 +5,19 @@
 #include <string>
 #include <string.h>
 
+
+
+
 class CLogStream
 {
 public:
 	CLogStream();
 	~CLogStream();
-
 	typedef CLogStream self;
-	typedef std::string Buffer;
 public:
 	self& operator<<(bool v)
 	{
-		m_buffer.append(v ? "1" : "0", 1);
+		m_stream << (v ? "1" : "0");
 		return *this;
 	}
 
@@ -29,8 +30,6 @@ public:
 	self& operator<<(long long);
 	self& operator<<(unsigned long long);
 
-	self& operator<<(const void*);
-
 	self& operator<<(float v)
 	{
 		*this << static_cast<double>(v);
@@ -39,24 +38,34 @@ public:
 	self& operator<<(double);
 	// self& operator<<(long double);
 
+
 	self& operator<<(char v)
 	{
-		m_buffer.append(&v, 1);
+		m_stream << v;
 		return *this;
 	}
 
-	// self& operator<<(signed char);
-	// self& operator<<(unsigned char);
+	self& operator<<(signed char v)
+	{
+		m_stream << v;
+		return *this;
+	}
+
+	self& operator<<(unsigned char v)
+	{
+		m_stream << v;
+		return *this;
+	}
 
 	self& operator<<(const char* str)
 	{
 		if (str)
 		{
-			m_buffer.append(str, strlen(str));
+			m_stream << str;
 		}
 		else
 		{
-			m_buffer.append("(null)", 6);
+			m_stream << "(null)";
 		}
 		return *this;
 	}
@@ -68,21 +77,29 @@ public:
 
 	self& operator<<(const std::string& v)
 	{
-		m_buffer.append(v.c_str(), v.size());
+		m_stream << v;
 		return *this;
 	}
 
-	void append(const char* data, int len) { m_buffer.append(data, len); }
-	//const Buffer& buffer() const { return buffer_; }
-	void resetBuffer() { m_buffer.reserve(); }
+	const std::stringstream& GetStream()const
+	{
+		return m_stream;
+	}
+
+	std::string&& ToString()
+	{
+		return std::move(m_stream.str());
+	}
+
+	void clearStream() 
+	{ 
+		m_stream.clear();
+	}
 
 private:
 	void staticCheck();
 
-	template<typename T>
-	void formatInteger(T);
-
-	Buffer m_buffer;
+	std::stringstream m_stream;
 	static const int kMaxNumericSize = 32;
 };
 

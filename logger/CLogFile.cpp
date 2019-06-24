@@ -74,36 +74,57 @@ size_t AppendFile::write(const char* logline, size_t len)
 }
 
 CLogFile::CLogFile(const std::string& basename,
+	const std::string& logPath,
 	off_t rollSize,
-	bool threadSafe,
+	std::size_t saveDays,
 	int flushInterval,
 	int checkEveryN)
-	: m_strBasename(basename),
+	:m_strPath(logPath),
+	m_strBasename(basename),
 	m_nRollSize(rollSize),
+	m_nSaveDays(saveDays),
 	m_nFlushInterval(flushInterval),
 	m_nCheckEvery(checkEveryN),
 	m_nCount(0),
-	m_mutex(threadSafe ? new std::mutex : NULL),
+	m_mutex(new std::mutex),
 	m_startOfPeriod(0),
-	m_lastRoll(0),
-	m_lastFlush(0)
+	m_lastFlush(0),
+	m_lastRoll(0)
 {
-	assert(basename.find('/') == std::string::npos);
 	rollFile();
+}
+
+bool CLogFile::SetOption(
+	const std::string& logPath,
+	const std::string& basename,
+	off_t rollSize,
+	std::size_t saveDays,
+	int flushInterval,
+	int checkEveryN)
+	
+{
+	m_strPath = logPath,
+	m_strBasename = basename;
+	m_nRollSize = rollSize;
+	m_nSaveDays = saveDays;
+	m_nFlushInterval = flushInterval;
+	m_nCheckEvery = checkEveryN;
+	rollFile();
+	return true;
 }
 
 CLogFile::~CLogFile() = default;
 
-void CLogFile::append(const char* logline, int len)
+void CLogFile::append(const std::string& strLogLine)
 {
 	if (m_mutex)
 	{
 		std::lock_guard<std::mutex> lock(*m_mutex);
-		append_unlocked(logline, len);
+		append_unlocked(strLogLine);
 	}
 	else
 	{
-		append_unlocked(logline, len);
+		append_unlocked(strLogLine);
 	}
 }
 
@@ -120,9 +141,9 @@ void CLogFile::flush()
 	}
 }
 
-void CLogFile::append_unlocked(const char* logline, int len)
+void CLogFile::append_unlocked(const std::string & strLogLine)
 {
-	m_file->append(logline, len);
+	m_file->append(strLogLine.c_str(), strLogLine.length());
 
 	if (m_file->writtenBytes() > m_nRollSize)
 	{

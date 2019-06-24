@@ -30,26 +30,41 @@ private:
 class CLogFile 
 {
 public:
-	CLogFile(const std::string& basename,
+	CLogFile(
+		const std::string& logPath,
+		const std::string& basename,
 		off_t rollSize,
-		bool threadSafe = true,
+		std::size_t saveDays= 7,
 		int flushInterval = 3,
 		int checkEveryN = 1024);
+
 	~CLogFile();
 
-	void append(const char* logline, int len);
+
+	bool SetOption(
+		const std::string& logPath,
+		const std::string& basename,
+		off_t rollSize,
+		std::size_t saveDays = 7,
+		int flushInterval = 3,
+		int checkEveryN = 1024);
+
+
+	void append(const std::string & strLogLine);
 	void flush();
 	bool rollFile();
 
 private:
-	void append_unlocked(const char* logline, int len);
+	void append_unlocked(const std::string & strLogLine);
 
 	static std::string getLogFileName(const std::string& basename, time_t* now);
 
-	const std::string m_strBasename;
-	const off_t m_nRollSize;
-	const int m_nFlushInterval;
-	const int m_nCheckEvery;
+	std::string m_strPath;
+	std::string m_strBasename;
+	off_t m_nRollSize;
+	int m_nFlushInterval;
+	int m_nCheckEvery;
+	std::size_t m_nSaveDays;
 
 	int m_nCount;
 
