@@ -1,4 +1,4 @@
-#include "CLogfile.h"
+#include "CLogFile.h"
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
