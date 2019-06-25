@@ -38,6 +38,8 @@ public:
 		int flushInterval = 3,
 		int checkEveryN = 1024);
 
+	CLogFile(const CLogFile& other);
+
 	~CLogFile();
 
 

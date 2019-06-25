@@ -13,10 +13,21 @@ CLogOutput::CLogOutput(std::string filePath,
 
 }
 
+CLogOutput::CLogOutput(const CLogOutput& other)
+	:m_logFile(other.m_logFile),
+	m_logNetHttp(other.m_logNetHttp),
+	m_logNetTcp(other.m_logNetTcp),
+	m_outputMode(other.m_outputMode)
+{
+
+}
+
 CLogOutput::~CLogOutput()
 {
 
 }
+
+
 
 
 bool CLogOutput::SetOutputOption(std::string filePath,

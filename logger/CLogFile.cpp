@@ -94,6 +94,22 @@ CLogFile::CLogFile(const std::string& basename,
 	rollFile();
 }
 
+CLogFile::CLogFile(const CLogFile& other)
+	:m_strPath(other.m_strPath),
+	m_strBasename(other.m_strBasename),
+	m_nRollSize(other.m_nRollSize),
+	m_nSaveDays(other.m_nSaveDays),
+	m_nFlushInterval(other.m_nFlushInterval),
+	m_nCheckEvery(other.m_nCheckEvery),
+	m_nCount(other.m_nCount),
+	m_mutex(new std::mutex),
+	m_startOfPeriod(other.m_startOfPeriod),
+	m_lastFlush(other.m_lastFlush),
+	m_lastRoll(other.m_lastRoll)
+{
+	rollFile();
+}
+
 bool CLogFile::SetOption(
 	const std::string& logPath,
 	const std::string& basename,
