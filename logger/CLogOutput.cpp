@@ -78,7 +78,7 @@ bool CLogOutput::SetOutputOption(std::string url,
 	return true;
 }
 
-void CLogOutput::WriteLog(std::string& strLog)
+void CLogOutput::WriteLog(const std::string& strLog)
 {
 	switch (m_outputMode) 
 	{

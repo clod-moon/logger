@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "CLogger.h"
+//#include "CLogger.h"
 
 int main()
 {

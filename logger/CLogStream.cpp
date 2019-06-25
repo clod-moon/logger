@@ -1,4 +1,5 @@
 #include "CLogStream.h"
+#include <limits>
 
 CLogStream::CLogStream():m_stream()
 {

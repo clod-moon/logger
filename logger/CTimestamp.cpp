@@ -73,7 +73,7 @@ CMilliTimestamp  CMilliTimestamp::Now()
 	gettimeofday(&tv, NULL);
 #endif
 	int64_t seconds = tv.tv_sec;
-	return CMilliTimestamp(seconds * kMilliSecondsPerSecond + tv.tv_usec);
+	return std::move(CMilliTimestamp(seconds * kMilliSecondsPerSecond + tv.tv_usec));
 }
 
 

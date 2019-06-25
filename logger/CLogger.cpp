@@ -22,9 +22,9 @@ const char* LogLevelName[CLogger::NUM_LOG_LEVELS] =
 
 
 CLogger::CLogger(int line, LogLevel level, const char* func)
-	:m_nLevel(level), m_nLine(line), m_strFunc(std::string(func)),
-	m_LogStream(CLogStream()),
-	m_time(CMilliTimestamp::Now()),
+	:m_nLevel(level), m_nLine(line), m_strFunc(std::move(std::string(func))),
+	m_LogStream(std::move(CLogStream())),
+	m_time(std::move(CMilliTimestamp::Now())),
 	m_isFlush(false)
 {
 	

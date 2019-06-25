@@ -65,7 +65,7 @@ public:
 		std::size_t logSaveDays = kLogSaveDays,
 		std::size_t fileSize = kLogFileSize);
 
-	void WriteLog(std::string& strLog);
+	void WriteLog(const std::string& strLog);
 
 	void Flush();
 

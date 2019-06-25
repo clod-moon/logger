@@ -43,11 +43,11 @@ private:
 	void fmtToJson();
 	void writeLog();
 private:
-	CMilliTimestamp&		m_time;
-	CLogStream&				m_LogStream;
-	LogLevel&				m_nLevel;
-	int&					m_nLine;
-	std::string&			m_strFunc;
+	CMilliTimestamp&&		m_time;
+	CLogStream&&				m_LogStream;
+	LogLevel				m_nLevel;
+	int					m_nLine;
+	std::string&&			m_strFunc;
 	std::stringstream       m_head;
 	bool					m_isFlush;
 public:
@@ -89,7 +89,7 @@ T* CheckNotNull(int line, const char *names, T* ptr)
 {
 	if (ptr == NULL)
 	{
-		CLogger(file, line, CLogger::FATAL).stream() << names;
+		CLogger(line, CLogger::FATAL,names).stream() << names;
 	}
 	return ptr;
 }
