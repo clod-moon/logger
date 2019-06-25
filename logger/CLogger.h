@@ -26,7 +26,7 @@ public:
 		JSON,
 	};
 
-	CLogger(int line, LogLevel level, const char* func);
+	CLogger(const char* file,int line, LogLevel level, const char* func);
 
 	~CLogger();
 
@@ -44,10 +44,11 @@ private:
 	void writeLog();
 private:
 	CMilliTimestamp&&		m_time;
-	CLogStream&&				m_LogStream;
+	CLogStream&&			m_LogStream;
+	const char*				m_strFile;
 	LogLevel				m_nLevel;
-	int					m_nLine;
-	std::string&&			m_strFunc;
+	int						m_nLine;
+	const char*				m_strFunc;
 	std::stringstream       m_head;
 	bool					m_isFlush;
 public:
@@ -69,14 +70,14 @@ inline CLogger::LogLevel CLogger::logLevel()
 }
 
 #define LOG_TRACE if (CLogger::logLevel() <= CLogger::TRACE) \
-  CLogger(__FILE__, __LINE__, CLogger::TRACE, __func__).stream()
+  CLogger(__FILE__, __LINE__, CLogger::TRACE, __FUNCTION__).stream()
 #define LOG_DEBUG if (CLogger::logLevel() <= CLogger::DEBUG_) \
-  CLogger(__FILE__, __LINE__, CLogger::DEBUG_, __func__).stream()
+  CLogger(__FILE__, __LINE__, CLogger::DEBUG_, __FUNCTION__).stream()
 #define LOG_INFO if (CLogger::logLevel() <= CLogger::INFO) \
   CLogger(__FILE__, __LINE__).stream()
-#define LOG_WARN CLogger(__FILE__, __LINE__, CLogger::WARN).stream()
-#define LOG_ERROR CLogger(__FILE__, __LINE__, CLogger::ERROR).stream()
-#define LOG_FATAL CLogger(__FILE__, __LINE__, CLogger::FATAL).stream()
+#define LOG_WARN CLogger(__FILE__, __LINE__, CLogger::WARN,__FUNCTION__).stream()
+#define LOG_ERROR CLogger(__FILE__, __LINE__, CLogger::ERROR,__FUNCTION__).stream()
+#define LOG_FATAL CLogger(__FILE__, __LINE__, CLogger::FATAL,__FUNCTION__).stream()
 #define LOG_SYSERR CLogger(__FILE__, __LINE__, false).stream()
 #define LOG_SYSFATAL CLogger(__FILE__, __LINE__, true).stream()
 

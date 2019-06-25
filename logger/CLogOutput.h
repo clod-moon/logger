@@ -22,7 +22,7 @@ const static std::string kLogBaseName = "service.log";
 #ifdef _WIN32
 	const static std::string kLogBasePath = "C:";
 #else
-	const static std::string kLogBasePath = "/var/log/";
+	const static std::string kLogBasePath = "./log/";
 #endif
 
 

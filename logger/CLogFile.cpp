@@ -217,7 +217,7 @@ std::string CLogFile::getLogFileName(const std::string& basename, time_t* now)
 #else
 	gmtime_r(now, &tm);
 #endif
-	strftime(timebuf, sizeof timebuf, ".%Y%m%d-%H%M%S.", &tm);
+	strftime(timebuf, sizeof timebuf, "%Y%m%d-%H%M%S", &tm);
 	filename += timebuf;
 	filename += ".log";
 	return filename;
