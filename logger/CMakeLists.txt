@@ -22,3 +22,5 @@ add_library(${PROJECT} SHARED ${SRC_LIST})
 
 #连接
 target_link_libraries(${PROJECT} ${COMMON_LIBS})
+
+set_target_properties(${PROJECT} PROPERTIES DEBUG_POSTFIX "d")

@@ -4,14 +4,13 @@
 #include <string.h>
 
 AppendFile::AppendFile(std::string filename)
-#ifndef _WIN32 
-	//此处目录需创建
+#ifndef _WIN32
 	: m_fp(fopen(filename.c_str(), "ae")), m_writtenBytes(0)
 #else
 	: m_writtenBytes(0)
 #endif // !_WIN32
 {
-
+	printf("%s\n",filename.c_str());
 #ifdef _WIN32
 	auto err =fopen_s(&m_fp, filename.c_str(), "ae");
 	if (err == 0) {

@@ -1,4 +1,4 @@
-if [ [$1 == "-d"] ];then
+if [[ $1 == "-d" ]];then
 	build_type="Debug"
 else
 	build_type="Release"

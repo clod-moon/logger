@@ -4,7 +4,7 @@
 #include <sstream>
 #include <string>
 #include <string.h>
-
+#include <iostream>
 
 
 
@@ -88,6 +88,7 @@ public:
 
 	const std::string ToString()
 	{
+		std::cout << m_stream.str() << std::endl;
 		return m_stream.str();
 	}
 

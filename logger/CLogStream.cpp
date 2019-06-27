@@ -1,10 +1,8 @@
 #include "CLogStream.h"
 #include <limits>
-#include <iostream>
 
-CLogStream::CLogStream():m_stream()
+CLogStream::CLogStream()
 {
-	std::cout << &m_stream << std::endl;
 }
 
 
