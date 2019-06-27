@@ -44,7 +44,7 @@ private:
 	void writeLog();
 private:
 	CMilliTimestamp&&		m_time;
-	CLogStream&&			m_LogStream;
+	CLogStream			m_LogStream;
 	const char*				m_strFile;
 	LogLevel				m_nLevel;
 	int						m_nLine;

@@ -4,8 +4,9 @@
 #include <string.h>
 
 AppendFile::AppendFile(std::string filename)
-#ifndef _WIN32
-	: m_fp(::fopen(filename.c_str(), "ae")), m_writtenBytes(0)
+#ifndef _WIN32 
+	//此处目录需创建
+	: m_fp(fopen(filename.c_str(), "ae")), m_writtenBytes(0)
 #else
 	: m_writtenBytes(0)
 #endif // !_WIN32

@@ -86,9 +86,9 @@ public:
 		return m_stream;
 	}
 
-	std::string&& ToString()
+	const std::string ToString()
 	{
-		return std::move(m_stream.str());
+		return m_stream.str();
 	}
 
 	void clearStream() 

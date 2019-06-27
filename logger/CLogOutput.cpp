@@ -8,9 +8,10 @@ CLogOutput::CLogOutput(std::string filePath,
 	std::string fileName,
 	std::size_t logSaveDays,
 	std::size_t fileSize)
-	:m_logFile(filePath, fileName, fileSize,logSaveDays)
+	:m_logFile(filePath, fileName, fileSize,logSaveDays),
+	m_outputMode(OUTPUT_CF)
 {
-
+	
 }
 
 CLogOutput::CLogOutput(const CLogOutput& other)
@@ -80,9 +81,9 @@ bool CLogOutput::SetOutputOption(std::string url,
 
 void CLogOutput::WriteLog(const std::string& strLog)
 {
+	fwrite(strLog.c_str(), 1, strLog.length(), stdout);
 	switch (m_outputMode) 
 	{
-		fwrite(strLog.c_str(),1,strLog.length(),stdout);
 	case OUTPUT_C:
 		break; 
 	case OUTPUT_CF:
