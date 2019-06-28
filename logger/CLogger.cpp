@@ -5,6 +5,11 @@
 #include <iostream>
 #include <iomanip>
 
+CLogger::LogStringType  CLogger::s_logStringType = CLogger::STRING;
+CLogger::LogLevel		CLogger::s_WriteLogLevel = CLogger::DEBUG_;
+CLogOutput	  CLogger::s_Output;
+std::string    CLogger::s_strLogTimeZone = "";
+
 void initLogLevel()
 {
 	CLogger::setLogLevel(CLogger::INFO);
@@ -62,11 +67,10 @@ void CLogger::writeLog()
 	switch (s_logStringType)
 	{
 	case CLogger::STRING:
-		std::cout<<m_LogStream.ToString()<<std::endl;
 		m_head << "["<<m_time.ToFormattedString() << "] ["<<m_strFile<<"] [" << 
 			std::setw(6) << std::setfill(' ') << std::left << LogLevelName[m_nLevel]
 			<< "] ["<<std::setw(5) << std::setfill(' ') << std::left << m_nLine << "] [" 
-			<< m_strFunc << "] " << m_LogStream.ToString();
+			<< m_strFunc << "] " << m_LogStream.ToString()<<"\n";
 		break;
 	case CLogger::JSON:
 		fmtToJson();

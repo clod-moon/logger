@@ -60,7 +60,7 @@ if(WIN32)
 
 else(PLAT STREQUAL "LINUX-X86_64")
 	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-		link_directories(${PROJECT_BINARY_DIR}/lib)
+		link_directories(${PROJECT_BINARY_DIR}/lib/linux ${PROJECT_BINARY_DIR}/bin/linux)
 		set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-rpath-link=${PROJECT_BINARY_DIR}/lib/linux -Wl,-rpath-link=${PROJECT_BINARY_DIR}/bin/linux")
 		set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath-link=${PROJECT_BINARY_DIR}/lib/linux -Wl,-rpath-link=${PROJECT_BINARY_DIR}/bin/linux")
 		set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${PROJECT_BINARY_DIR}/lib/linux)
@@ -83,8 +83,9 @@ message(STATUS " Build lib dir " ${LIBRARY_OUTPUT_PATH})
 message(STATUS " Build exe dir" ${EXECUTABLE_OUTPUT_PATH})
 
 
-add_subdirectory(example)
+
 add_subdirectory(logger)
+add_subdirectory(example)
 
 
 

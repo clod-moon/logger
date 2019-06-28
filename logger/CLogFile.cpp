@@ -10,7 +10,6 @@ AppendFile::AppendFile(std::string filename)
 	: m_writtenBytes(0)
 #endif // !_WIN32
 {
-	printf("%s\n",filename.c_str());
 #ifdef _WIN32
 	auto err =fopen_s(&m_fp, filename.c_str(), "ae");
 	if (err == 0) {

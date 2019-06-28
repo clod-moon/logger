@@ -4,6 +4,10 @@
 int main()
 {
 	//printf("hello world!\n");
-	LOG_DEBUG << "hello world!";
+	for (int i = 0; i < 100; i++)
+	{
+		LOG_DEBUG << "hello world!";
+	}
+	
 	return 0;
 }

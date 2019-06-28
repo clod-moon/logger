@@ -59,11 +59,6 @@ public:
 
 };
 
-CLogger::LogStringType  CLogger::s_logStringType = CLogger::STRING;
-CLogger::LogLevel		CLogger::s_WriteLogLevel = CLogger::DEBUG_;
-CLogOutput	  CLogger::s_Output = CLogOutput();
-std::string    CLogger::s_strLogTimeZone = "";
-
 inline CLogger::LogLevel CLogger::logLevel()
 {
 	return s_WriteLogLevel;

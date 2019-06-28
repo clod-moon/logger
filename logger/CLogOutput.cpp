@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
-
+#include <iostream>
 
 CLogOutput::CLogOutput(std::string filePath,
 	std::string fileName,
@@ -11,7 +11,6 @@ CLogOutput::CLogOutput(std::string filePath,
 	:m_logFile(filePath, fileName, fileSize,logSaveDays),
 	m_outputMode(OUTPUT_CF)
 {
-
 }
 
 CLogOutput::CLogOutput(const CLogOutput& other)
@@ -20,7 +19,6 @@ CLogOutput::CLogOutput(const CLogOutput& other)
 	m_logNetTcp(other.m_logNetTcp),
 	m_outputMode(other.m_outputMode)
 {
-
 }
 
 CLogOutput::~CLogOutput()

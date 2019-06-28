@@ -18,7 +18,7 @@ std::string CMilliTimestamp::ToString() const
 	char buf[32] = { 0 };
 	int64_t seconds = m_millisecondsSinceEpoch / kMilliSecondsPerSecond;
 	int64_t microseconds = m_millisecondsSinceEpoch % kMilliSecondsPerSecond;
-	snprintf(buf, sizeof(buf) - 1, "%" PRId64 ".%06" PRId64 "", seconds, microseconds);
+	snprintf(buf, sizeof(buf) - 1, "%lld.%06lld", seconds, microseconds);
 	return buf;
 }
 
