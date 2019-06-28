@@ -1,1 +1,0 @@
-g++  -g   -Wl,-rpath=. -m64 -Wl,-rpath-link=/home/chun/logger/build/linux/lib/linux -Wl,-rpath-link=/home/chun/logger/build/linux/bin/linux -rdynamic CMakeFiles/example.dir/example.cpp.o  -o ../bin/linux/exampled  -L/home/chun/logger/build/linux/lib/linux  -L/home/chun/logger/build/linux/bin/linux -lloggerd 
