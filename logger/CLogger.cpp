@@ -3,6 +3,7 @@
 #include <thread>
 #include "CTimestamp.h"
 #include <iostream>
+#include <iomanip>
 
 void initLogLevel()
 {
@@ -28,8 +29,6 @@ CLogger::CLogger(const char* file,int line, LogLevel level, const char* func)
 	m_time(std::move(CMilliTimestamp::Now())),
 	m_isFlush(false)
 {
-	m_LogStream<<10;
-	m_LogStream<<"aa";
 }
 
 CLogger::~CLogger()
@@ -51,6 +50,7 @@ void CLogger::fmtToJson()
 {
 	 m_head <<"{ \"timestamp\":";
 	 m_head << '"' << m_time.ToFormattedString() << '",';
+	 m_head << "\"file\":" << m_strFile << '",';
 	 m_head << "\"logLevel\":" << '"' << LogLevelName[m_nLevel] << '",';
 	 m_head << "\"line\":" << m_nLine << ',';
 	 m_head << "\"func\":" << '"' << m_strFunc << '",';
@@ -63,8 +63,10 @@ void CLogger::writeLog()
 	{
 	case CLogger::STRING:
 		std::cout<<m_LogStream.ToString()<<std::endl;
-		m_head << m_time.ToFormattedString() << "  " << LogLevelName[m_nLevel]
-			<< "  " << m_nLine << "  " << m_strFunc << "  " << m_LogStream.ToString();
+		m_head << "["<<m_time.ToFormattedString() << "] ["<<m_strFile<<"] [" << 
+			std::setw(6) << std::setfill(' ') << std::left << LogLevelName[m_nLevel]
+			<< "] ["<<std::setw(5) << std::setfill(' ') << std::left << m_nLine << "] [" 
+			<< m_strFunc << "] " << m_LogStream.ToString();
 		break;
 	case CLogger::JSON:
 		fmtToJson();
