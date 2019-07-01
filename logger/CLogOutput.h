@@ -35,7 +35,6 @@ public:
 		std::size_t logSaveDays = kLogSaveDays,
 		std::size_t fileSize = kLogFileSize);
 	
-	CLogOutput(const CLogOutput& other);
 	~CLogOutput();
 
 public:

@@ -13,13 +13,6 @@ CLogOutput::CLogOutput(std::string filePath,
 {
 }
 
-CLogOutput::CLogOutput(const CLogOutput& other)
-	:m_logFile(other.m_logFile),
-	m_logNetHttp(other.m_logNetHttp),
-	m_logNetTcp(other.m_logNetTcp),
-	m_outputMode(other.m_outputMode)
-{
-}
 
 CLogOutput::~CLogOutput()
 {
@@ -79,12 +72,13 @@ bool CLogOutput::SetOutputOption(std::string url,
 
 void CLogOutput::WriteLog(const std::string& strLog)
 {
-	fwrite(strLog.c_str(),1,strLog.length(),stdout);
 	switch (m_outputMode) 
 	{	
 	case OUTPUT_C:
+		//fwrite(strLog.c_str(), 1, strLog.length(), stdout);
 		break; 
 	case OUTPUT_CF:
+		//fwrite(strLog.c_str(), 1, strLog.length(), stdout);
 		m_logFile.append(strLog);
 		break; 
 	case OUTPUT_CFNH:
