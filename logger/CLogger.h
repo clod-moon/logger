@@ -20,7 +20,7 @@ public:
 		NUM_LOG_LEVELS,
 	};
 
-	enum LogStringType
+	enum LogFmtType
 	{
 		STRING,
 		JSON,
@@ -35,9 +35,31 @@ public:
 	static LogLevel logLevel();
 	static void setLogLevel(LogLevel level);
 
-	static void setOutput();
+	/*********************************************
+	**说明：通过该函数可以设置日志写文件的参数
+	**param：
+	**		strLogPath：设置日志的输出路径，该目录可不存在
+	**		strLogBaseName： 设置日志的基本名称
+	**		logLevel：设置日志的输出级别
+	**		logFileSize： 设置每个日志文件的最大文件大小
+	**		logSaveDays：设置日志的保存天数
+	**		logFmtType：设置日志的输出格式，默认普通字符串
+	********************************************/
+	static void setOutputFileOptions(const std::string&strLogPath,const std::string& strLogBaseName
+		,const LogLevel logLevel,const size_t logFileSize,const size_t logSaveDays = 7,const LogFmtType logFmtType = STRING
+		);
+
+	static void setOutputConsoleOptions(const bool isPrint);
+
+	static void setOutputNetOfTcpOptions(const std::string& strDestIp,const int nDestPort);
+
+	static void setOutputNetOfHttpOptions(const std::string strUrl);
+
+	static void setLogFileFlushOption(const size_t nFlushInterval, const size_t checkEveryN);
+
+
 	static void setTimeZone(const std::string tz);
-	static void setLogStringType(const LogStringType t);
+	static void setLogFmtType(const LogFmtType t);
 
 private:
 	void fmtToJson();
@@ -52,8 +74,8 @@ private:
 	std::stringstream       m_head;
 	bool					m_isFlush;
 public:
-	static LogStringType  s_logStringType; 
-	static LogLevel		  s_WriteLogLevel;
+	static LogFmtType	  s_logFmtType;
+	static LogLevel		  s_writeLogLevel;
 	static CLogOutput	  s_Output;
 	static std::string    s_strLogTimeZone;
 
@@ -61,7 +83,7 @@ public:
 
 inline CLogger::LogLevel CLogger::logLevel()
 {
-	return s_WriteLogLevel;
+	return s_writeLogLevel;
 }
 
 #define LOG_TRACE if (CLogger::logLevel() <= CLogger::TRACE) \

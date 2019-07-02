@@ -5,8 +5,8 @@
 #include <iostream>
 #include <iomanip>
 
-CLogger::LogStringType  CLogger::s_logStringType = CLogger::STRING;
-CLogger::LogLevel		CLogger::s_WriteLogLevel = CLogger::DEBUG_;
+CLogger::LogFmtType  CLogger::s_logFmtType = CLogger::STRING;
+CLogger::LogLevel		CLogger::s_writeLogLevel = CLogger::DEBUG_;
 CLogOutput	  CLogger::s_Output;
 std::string    CLogger::s_strLogTimeZone = "";
 
@@ -54,17 +54,17 @@ CLogger::~CLogger()
 void CLogger::fmtToJson()
 {
 	 m_head <<"{ \"timestamp\":";
-	 m_head << '"' << m_time.ToFormattedString() << '",';
-	 m_head << "\"file\":" << m_strFile << '",';
-	 m_head << "\"logLevel\":" << '"' << LogLevelName[m_nLevel] << '",';
-	 m_head << "\"line\":" << m_nLine << ',';
-	 m_head << "\"func\":" << '"' << m_strFunc << '",';
-	 m_head << "\content\":" << '"' << m_LogStream.ToString() << '"}';
+	 m_head <<"\"" << m_time.ToFormattedString() << "\",";
+	 m_head << "\"file\":\"" << m_strFile << "\",";
+	 m_head << "\"logLevel\":\"" << LogLevelName[m_nLevel] << "\",";
+	 m_head << "\"line\":" << m_nLine << ",";
+	 m_head << "\"func\":\"" << m_strFunc << "\",";
+	 m_head << "\"content\":\"" << m_LogStream.ToString() << "\"}";
 }
 
 void CLogger::writeLog()
 {
-	switch (s_logStringType)
+	switch (s_logFmtType)
 	{
 	case CLogger::STRING:
 		m_head << "["<<m_time.ToFormattedString() << "] ["<<m_strFile<<"] [" << 
@@ -82,12 +82,37 @@ void CLogger::writeLog()
 
 void CLogger::setLogLevel(CLogger::LogLevel level)
 {
-	s_WriteLogLevel = level;
+	s_writeLogLevel = level;
 }
 
-void CLogger::setOutput()
+void CLogger::setOutputFileOptions(const std::string&strLogPath, const std::string& strLogBaseName
+	, const LogLevel logLevel, const size_t logFileSize, const size_t logSaveDays,const LogFmtType logFmtType)
 {
-	s_Output.SetOutputOption();
+	s_writeLogLevel = logLevel;
+
+	s_logFmtType = logFmtType;
+
+	s_Output.SetFlieOption(strLogPath, strLogBaseName, logSaveDays, logFileSize);
+}
+
+void CLogger::setOutputConsoleOptions(const bool isPrint)
+{
+	s_Output.SetConsoleOption(isPrint);
+}
+	 
+void CLogger::setOutputNetOfTcpOptions(const std::string& strDestIp, const int nDestPort)
+{
+	s_Output.SetNetOfTcpOption(strDestIp, nDestPort);
+}
+	 
+void CLogger::setOutputNetOfHttpOptions(const std::string strUrl)
+{
+	s_Output.SetNetOfHttpOption(strUrl);
+}
+	 
+void CLogger::setLogFileFlushOption(const size_t nFlushInterval, const size_t checkEveryN)
+{
+	s_Output.SetLogFileFlushOption(nFlushInterval, checkEveryN);
 }
 
 void CLogger::setTimeZone(const std::string tz)
@@ -95,7 +120,7 @@ void CLogger::setTimeZone(const std::string tz)
 	s_strLogTimeZone = tz;
 }
 
-void CLogger::setLogStringType(const LogStringType t)
+void CLogger::setLogFmtType(const LogFmtType t)
 {
-	s_logStringType = t;
+	s_logFmtType = t;
 }

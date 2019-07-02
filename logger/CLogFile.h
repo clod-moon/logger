@@ -54,6 +54,7 @@ private:
 	off_t m_writtenBytes;
 };
 
+
 class CLogFile 
 {
 public:
@@ -76,6 +77,7 @@ public:
 		int flushInterval = 3,
 		int checkEveryN = 1024);
 
+	void SetLogFileFlushOption(const size_t flushInterval, const size_t checkEveryN);
 
 	void append(const std::string & strLogLine);
 	void flush();

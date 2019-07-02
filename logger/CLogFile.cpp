@@ -127,11 +127,18 @@ bool CLogFile::SetOption(
 	m_nSaveDays = saveDays;
 	m_nFlushInterval = flushInterval;
 	m_nCheckEvery = checkEveryN;
-	rollFile();
+	//rollFile();
 	return true;
 }
 
+
 CLogFile::~CLogFile() = default;
+
+void CLogFile::SetLogFileFlushOption(const size_t flushInterval, const size_t checkEveryN)
+{
+	m_nFlushInterval = flushInterval;
+	m_nCheckEvery = checkEveryN;
+}
 
 void CLogFile::append(const std::string& strLogLine)
 {
