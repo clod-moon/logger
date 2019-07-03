@@ -14,40 +14,38 @@
 #endif // _WIN32
 
 
-std::once_flag CLogFile::s_flag;
-
-AppendFile::AppendFile(std::string filename)
+AppendFile::AppendFile(std::string strFileName)
 #ifndef _WIN32
-	: m_fp(fopen(filename.c_str(), "ae")), m_writtenBytes(0)
+	: m_pFp(fopen(strFileName.c_str(), "ae")), m_writtenBytes(0)
 #else
 	: m_writtenBytes(0)
 #endif // !_WIN32
 {
 #ifdef _WIN32
-	auto err =fopen_s(&m_fp, filename.c_str(), "ae");
+	auto err =fopen_s(&m_pFp, strFileName.c_str(), "ae");
 	if (err == 0) {
 		printf("The file 'crt_fopen_s.c' was opened\n");
 	}
 #endif // _WIN32
-	assert(m_fp);
-	setvbuf(m_fp, m_buffer, _IOLBF,sizeof m_buffer);
+	assert(m_pFp);
+	setvbuf(m_pFp, m_szBuffer, _IOLBF,sizeof m_szBuffer);
 }
 
 AppendFile::~AppendFile()
 {
-	::fclose(m_fp);
+	::fclose(m_pFp);
 }
 
-void AppendFile::append(const char* logline, const size_t len)
+void AppendFile::append(const char* szLogline, const size_t len)
 {
-	size_t n = write(logline, len);
+	size_t n = write(szLogline, len);
 	size_t remain = len - n;
 	while (remain > 0)
 	{
-		size_t x = write(logline + n, remain);
+		size_t x = write(szLogline + n, remain);
 		if (x == 0)
 		{
-			int err = ferror(m_fp);
+			int err = ferror(m_pFp);
 			if (err)
 			{
 #ifdef _WIN32
@@ -70,16 +68,16 @@ void AppendFile::append(const char* logline, const size_t len)
 
 void AppendFile::flush()
 {
-	::fflush(m_fp);
+	::fflush(m_pFp);
 }
 
-size_t AppendFile::write(const char* logline, size_t len)
+size_t AppendFile::write(const char* szLogline, size_t len)
 {
 	// #undef fwrite_unlocked
 #ifdef _WIN32
-	return fwrite(logline, 1, len, m_fp);
+	return fwrite(szLogline, 1, len, m_pFp);
 #else
-	return fwrite_unlocked(logline, 1, len, m_fp);
+	return fwrite_unlocked(szLogline, 1, len, m_pFp);
 #endif // !_WIN32
 	
 	
@@ -241,10 +239,10 @@ bool CLogFile::rollFile()
 	return false;
 }
 
-std::string CLogFile::getRollLogFileName(std::string& fileName)
+std::string CLogFile::getRollLogFileName(const std::string& strFileName)
 {
-	int post = fileName.find_last_of('.');
-	std::string strRollFileName(fileName,0, post);
+	int post = strFileName.find_last_of('.');
+	std::string strRollFileName(strFileName,0, post);
 	char timebuf[32];
 	struct tm tm;
 	

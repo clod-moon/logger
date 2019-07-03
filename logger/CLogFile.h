@@ -1,3 +1,13 @@
+/*****************************************************
+** CLogFile.h
+** Copyright(c) 2019 enst.org.cn. All rights reserved.
+** Description:主要实现对日志文件实际写入等操作的封装
+** Ver:0.1
+** Created:2019/06/29
+** Modified:2019/07/03
+** Author: 张迎春
+******************************************************/
+
 #ifndef _C_LOGFILE__
 #define _C_LOGFILE__
 
@@ -19,14 +29,21 @@ enum
 	LOG_DT_WHT = 14
 };
 
+
+/*****************************************************
+** 类名：AppendFile
+** 说明：
+**		该类是文件实质的打开，写入操作，缓冲区刷新，
+**		只提供给CLogFile使用
+******************************************************/
 class AppendFile
 {
 public:
-	explicit AppendFile(std::string filename);
+	explicit AppendFile(std::string strFileName);
 
 	~AppendFile();
 
-	void append(const char* logline, size_t len);
+	void append(const char* szLogline, size_t len);
 
 	void flush();
 
@@ -37,7 +54,7 @@ public:
 
 	FILE* getHandle()const
 	{
-		return m_fp;
+		return m_pFp;
 	}
 
 	void setWrittenBytes(off_t written)
@@ -47,35 +64,42 @@ public:
 
 private:
 
-	size_t write(const char* logline, size_t len);
+	size_t write(const char* szLogline, size_t len);
 
-	FILE* m_fp;
-	char m_buffer[64 * 1024];
-	off_t m_writtenBytes;
+	FILE*	m_pFp;
+	char	m_szBuffer[64 * 1024];
+	off_t	m_writtenBytes;
 };
 
 
+/*****************************************************
+** 类名：CLogFile
+** 说明：
+**		该类是对日志文件的控制，控制日志文件所在文件目录
+**		的管理，包括日志路径，日志名称，日志刷新的条件，
+**		以及日志保存天数等等参数的管理
+******************************************************/
 class CLogFile 
 {
 public:
 	CLogFile(
-		const std::string& logPath,
-		const std::string& basename,
+		const std::string& strLogPath,
+		const std::string& strBaseName,
 		off_t rollSize,
-		std::size_t saveDays= 7,
-		int flushInterval = 3,
-		int checkEveryN = 1024);
+		std::size_t nSaveDays= 7,
+		int nFlushInterval = 3,
+		int nCheckEveryN = 1024);
 
 	~CLogFile();
 
 
 	bool SetOption(
-		const std::string& logPath,
-		const std::string& basename,
+		const std::string& strLogPath,
+		const std::string& strBaseName,
 		off_t rollSize,
-		std::size_t saveDays = 7,
-		int flushInterval = 3,
-		int checkEveryN = 1024);
+		std::size_t nSaveDays = 7,
+		int nFlushInterval = 3,
+		int nCheckEveryN = 1024);
 
 	void SetLogFileFlushOption(const size_t flushInterval, const size_t checkEveryN);
 
@@ -94,8 +118,8 @@ private:
 	void checkDir(std::string&, std::string&);
 	void getDirDays();
 
-
-	std::string getRollLogFileName(std::string& fileName);
+	//获取日志切换文件时的名称
+	std::string getRollLogFileName(const std::string& strFileName);
 
 	std::string m_strPath;
 	std::string m_strBasename;
@@ -104,8 +128,10 @@ private:
 	int m_nCheckEvery;
 	std::size_t m_nSaveDays;
 	int m_nCount;
-	std::set<std::string> m_vDaysDir;
+	//存放日志目录下的日志文件夹
+	std::set<std::string> m_vDaysDir; 
 
+	//通过该锁实现线程安全
 	std::unique_ptr<std::mutex> m_mutex;
 	time_t m_startOfPeriod;
 	time_t m_lastRoll;
@@ -113,7 +139,6 @@ private:
 	std::unique_ptr<AppendFile> m_file;
 
 	const static int kRollPerSeconds = 60 * 60 * 24;
-	static std::once_flag s_flag;
 };
 
 

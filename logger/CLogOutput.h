@@ -1,3 +1,14 @@
+/*****************************************************
+** CLogOutput.h
+** Copyright(c) 2019 enst.org.cn. All rights reserved.
+** Description:主要实现日志输出的管理，暂时只支持console和file
+**			   http和tcp网络后续实现
+** Ver:0.1
+** Created:2019/06/29
+** Modified:2019/07/03
+** Author: 张迎春
+******************************************************/
+
 #ifndef _C_LOG_OUTPUT__
 #define _C_LOG_OUTPUT__
 

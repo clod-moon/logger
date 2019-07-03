@@ -1,73 +1,83 @@
+/*****************************************************
+** CMicroTimestamp.h
+** Copyright(c) 2019 enst.org.cn. All rights reserved.
+** Description:对微秒时间戳的封装
+** Ver:0.1
+** Created:2019/06/29
+** Modified:2019/07/03
+** Author: 张迎春
+******************************************************/
+
 #ifndef _C_TIMESTAMP__
 #define _C_TIMESTAMP__
 
 #include <string>
 #include <inttypes.h>
 
-class CMilliTimestamp
+class CMicroTimestamp
 {
 public:
-	CMilliTimestamp() :m_millisecondsSinceEpoch(0)
+	CMicroTimestamp() :m_microsecondsSinceEpoch(0)
 	{
 		
 	}
 
-	explicit CMilliTimestamp(int64_t millisecondsSinceEpoch)
-		:m_millisecondsSinceEpoch(millisecondsSinceEpoch)
+	explicit CMicroTimestamp(int64_t MicrosecondsSinceEpoch)
+		:m_microsecondsSinceEpoch(MicrosecondsSinceEpoch)
 	{
 
 	}
 
-	void Swap(CMilliTimestamp& other)
+	void Swap(CMicroTimestamp& other)
 	{
-		std::swap(m_millisecondsSinceEpoch, other.m_millisecondsSinceEpoch);
+		std::swap(m_microsecondsSinceEpoch, other.m_microsecondsSinceEpoch);
 	}
 
 	std::string ToString() const;
 
 	
-	std::string ToFormattedString(bool showMilliseconds = true) const;
+	std::string ToFormattedString(bool showMicroseconds = true) const;
 
 	bool valid() const 
 	{ 
-		return m_millisecondsSinceEpoch > 0;
+		return m_microsecondsSinceEpoch > 0;
 	}
 
-	int64_t GetMilliseconds() const
+	int64_t GetMicroseconds() const
 	{ 
-		return m_millisecondsSinceEpoch;
+		return m_microsecondsSinceEpoch;
 	}
 
 	time_t SecondsSinceEpoch() const
 	{
-		return static_cast<time_t>(m_millisecondsSinceEpoch / kMilliSecondsPerSecond);
+		return static_cast<time_t>(m_microsecondsSinceEpoch / kMicroSecondsPerSecond);
 	}
 
-	static CMilliTimestamp Now();
-	static CMilliTimestamp Invalid()
+	static CMicroTimestamp Now();
+	static CMicroTimestamp Invalid()
 	{
-		return CMilliTimestamp();
+		return CMicroTimestamp();
 	}
 
-	static CMilliTimestamp FromUnixTime(time_t t)
+	static CMicroTimestamp FromUnixTime(time_t t)
 	{
 		return FromUnixTime(t, 0);
 	}
 
-	static CMilliTimestamp FromUnixTime(time_t t, int milliseconds)
+	static CMicroTimestamp FromUnixTime(time_t t, int Microseconds)
 	{
-		return CMilliTimestamp(static_cast<int64_t>(t) * kMilliSecondsPerSecond + milliseconds);
+		return CMicroTimestamp(static_cast<int64_t>(t) * kMicroSecondsPerSecond + Microseconds);
 	}
 
-	~CMilliTimestamp()
+	~CMicroTimestamp()
 	{
 
 	}
 
 public:
-	static const int kMilliSecondsPerSecond = 1000 * 1000;
+	static const int kMicroSecondsPerSecond = 1000 * 1000;
 private:
-	int64_t m_millisecondsSinceEpoch; //微秒时间戳
+	int64_t m_microsecondsSinceEpoch; //微秒时间戳
 	//int64_t m_nanosecondsSinceEpoch;  //纳秒时间戳
 };
 

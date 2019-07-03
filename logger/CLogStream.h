@@ -1,3 +1,13 @@
+/*****************************************************
+** CLogStream.h
+** Copyright(c) 2019 enst.org.cn. All rights reserved.
+** Description:主要实现日志流式的写入
+** Ver:0.1
+** Created:2019/06/29
+** Modified:2019/07/03
+** Author: 张迎春
+******************************************************/
+
 #ifndef __C_LOGSTREAM__
 #define __C_LOGSTREAM__ 
 
